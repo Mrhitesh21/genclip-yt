@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BuzzSnaps - Viral Video Clip Generator</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <div class="header-container">
+        <h1 class="maintitle">🎥 BuzzSnaps ⚡️</h1>
+        <h3 class="title">✨ Capture Magic, Create Viral Clips Instantly! 🚀</h3>
+    </div>
+
+    <!-- Tagline Section with Wave -->
+    <div class="funky-subtitle">
+        <p class="line left big">✨ Transform your videos into viral magic — effortlessly!</p>
+        <p class="line right small">🚀 Hit "Clip" and launch your content into the stratosphere!</p>
+        <p class="line left medium">💥 Boom! Your best moments, trimmed, tuned, and trending.</p>
+        <p class="line right big">🎉 From zero to "OMG I saw this everywhere!" in seconds.</p>
+        <p class="line left small">🔥 Trending? Viral? Legendary? Yeah, we do that.</p>
+        <p class="line right medium">⚡️ Instant highlights. Maximum hype. Minimum effort.</p>
+        <p class="line left big">🎬 Ready to steal the spotlight? Let’s make some buzz!</p>
+        <p class="line center extra">🤩 BuzzSnaps — where your moment becomes <strong>the</strong> moment.</p>
+
+
+
+        <!-- Clip Generator Form -->
+        <div class="container">
+            <h2>🔥Create Clips from Youtube Video And Get Viral Instantly...🚀</h2>
+            <form id="ytForm">
+                <input type="text" id="youtube_url" placeholder="Paste YouTube Link Here" required />
+                <button type="submit">Generate Clip</button>
+            </form>
+
+            <div id="preview"></div>
+            <div id="output">Paste Your Youtube Video Link...</div>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            document.getElementById("ytForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const url = document.getElementById("youtube_url").value;
+                const videoId = extractVideoId(url);
+
+                if (!videoId) {
+                    alert("Invalid YouTube link.");
+                    return;
+                }
+
+                const previewContainer = document.getElementById("preview");
+                previewContainer.innerHTML = `
+            <h3 style="text-align:center;">Video Preview</h3>
+            <iframe style="aspect-ratio: 16 / 9; width: 100%; max-width: 640px;" 
+                src="https://www.youtube.com/embed/${videoId}" 
+                allowfullscreen>
+            </iframe>
+        `;
+
+                const formData = new FormData();
+                formData.append("youtube_url", url);
+
+                document.getElementById("output").innerHTML = `
+            <div class="loading">
+                <p>💥 Magic is happening... Please wait... 🚀</p>
+                <div class="spinner"></div>
+            </div>
+        `;
+
+                fetch("process.php", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        const container = document.getElementById("output");
+                        container.innerHTML = "<h3>🎬 Your Viral Clips</h3><div class='clip-grid'></div>";
+
+                        const grid = container.querySelector(".clip-grid");
+
+                        Object.entries(data.clips).forEach(([key, clipPath], index) => {
+                            const div = document.createElement("div");
+                            div.className = "clip-card";
+                            const clipId = `clip_${index}`;
+
+                            div.innerHTML = `
+                        <video controls src="${clipPath}" class="clip-video"></video>
+                        <div class="btn-group">
+                            <a class="download-btn" href="${clipPath}" download>⬇ Download ${key}s Clip</a>
+                            <button class="convert-btn" data-path="${clipPath}" data-id="${clipId}">📱 Convert to 9:16</button>
+                        </div>
+                        <div class="converted-output" id="${clipId}_converted"></div>
+                    `;
+                            grid.appendChild(div);
+                        });
+
+                        document.querySelectorAll('.convert-btn').forEach(btn => {
+                            btn.addEventListener('click', function () {
+                                const clipPath = this.getAttribute('data-path');
+                                const clipId = this.getAttribute('data-id');
+                                const outputDiv = document.getElementById(`${clipId}_converted`);
+                                outputDiv.innerHTML = "⏳ Converting...";
+
+                                fetch("convert.php", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({ clip_path: clipPath }),
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.converted) {
+                                            outputDiv.innerHTML = `
+                                        <video controls src="${data.converted}" class="clip-video"></video>
+                                        <a class="download-btn" href="${data.converted}" download>⬇ Download 9:16</a>
+                                    `;
+                                        } else {
+                                            outputDiv.innerHTML = "<p style='color:red;'>❌ Conversion failed.</p>";
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.error("Conversion fetch error:", err);
+                                        outputDiv.innerHTML = "<p style='color:red;'>❌ Error during conversion. Check console.</p>";
+                                    });
+
+
+                            });
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Conversion fetch error:", err);
+                        outputDiv.innerHTML = "<p style='color:red;'>❌ Error during conversion. Check console.</p>";
+                    });
+
+            });
+
+            function extractVideoId(url) {
+                const match = url.match(/(?:youtube\.com.*(?:\/|v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                return match ? match[1] : null;
+            }
+        </script>
+
+
+</body>
+
+</html>

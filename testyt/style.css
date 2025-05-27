@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    overflow-x: hidden;
+}
+
+.header-container {
+    text-align: center;
+    padding: 60px 20px 20px;
+    /* background: rgba(0, 0, 0, 0.5); */
+}
+
+.maintitle {
+    font-size: 48px;
+    font-weight: 700;
+    color: #E0C3FC;
+    text-shadow: 2px 2px #3f00ff;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 10px;
+    color: #E0E0FF;
+}
+
+.funky-subtitle {
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px auto;
+    max-width: 900px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    position: relative;
+}
+
+.funky-subtitle p {
+    margin: 20px 0;
+    font-size: 20px;
+    animation: fadeInUp 1s ease both;
+}
+
+.line.left {
+    text-align: left;
+    color: #D8B4FE;
+}
+
+.line.right {
+    text-align: right;
+    color: #A78BFA;
+}
+
+.line.center {
+    text-align: center;
+    font-weight: bold;
+    color: #C4B5FD;
+}
+
+.line.small {
+    font-size: 16px;
+}
+
+.line.medium {
+    font-size: 20px;
+}
+
+.line.big {
+    font-size: 24px;
+}
+
+.line.extra {
+    font-size: 26px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.wave {
+    position: relative;
+    bottom: -1px;
+    display: block;
+    width: 100%;
+    height: 100px;
+    margin-top: -30px;
+}
+
+
+.container {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 20px;
+    margin: 40px auto;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+h2 {
+    text-align: center;
+    color: #E0C3FC;
+    margin-bottom: 20px;
+}
+
+input,
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+input {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+button {
+    background: linear-gradient(to right, #7F00FF, #E100FF);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #3f00ff, #7F00FF);
+    transform: scale(1.03);
+}
+
+#preview,
+#output {
+    margin-top: 20px;
+}
+
+video {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+a {
+    color: #E0C3FC;
+    text-decoration: underline;
+    display: block;
+    margin-top: 10px;
+}
+
+iframe {
+    border: none;
+    border-radius: 12px;
+}
+
+
+/* Add this to your existing style.css */
+
+@keyframes waveUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px); /* how high the wave goes */
+  }
+}
+
+.funky-subtitle p {
+  animation: waveUpDown 4s ease-in-out infinite;
+  /* Add a slight delay per line for stagger effect */
+}
+
+/* Optional: stagger each line animation with delay */
+.funky-subtitle p:nth-child(odd) {
+  animation-delay: 0s;
+}
+.funky-subtitle p:nth-child(even) {
+  animation-delay: 2s;
+}
+
+/* Grid Container */
+.clip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Card Styling */
+.clip-card {
+  background: #1e1e2f;
+  border: 2px solid #4d4d73;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.clip-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Video Styling */
+.clip-video {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Download Button */
+.download-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff4d79, #ff914d);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #ff914d, #ff4d79);
+  transform: scale(1.05);
+}
+.loading {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+}
+
+.spinner {
+    margin: 20px auto;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ccc;
+    border-top-color: #ff4081;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
